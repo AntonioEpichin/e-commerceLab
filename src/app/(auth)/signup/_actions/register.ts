@@ -6,17 +6,15 @@ import { redirect } from 'next/navigation';
 
 export default async function register(formData: FormData) {
   const entries = Array.from(formData.entries());
-  const { name, email, dataNascimento, cpf, password, telefone } = Object.fromEntries(entries) as {
+  const { name, email, password } = Object.fromEntries(entries) as {
     name: string;
-    dataNascimento: string;
-    cpf: string;
-    telefone: string;
     email: string;
     password: string;
+    [key: string]: string; // Add this line to allow additional properties
   };
 
   // Verifique se algum campo está vazio
-  if (!name || !email || !password || !dataNascimento || !cpf || !telefone) {
+  if (!name || !email || !password) {
     throw new Error('Preencha todos os campos');
   }
 
@@ -29,16 +27,13 @@ export default async function register(formData: FormData) {
     throw new Error('Usuário já existe');
   }
 
-await db.user.create({
+  await db.user.create({
     data: {
-        name,
-        email,
-        password: hashSync(password, 10),
-        dataNascimento: new Date(dataNascimento), // Convert to Date object
-        cpf,
-        telefone,
+      name,
+      email,
+      password: hashSync(password, 10),
     },
-});
+  });
 
-redirect('/');
+  redirect('/');
 }

@@ -10,17 +10,15 @@ export default async function login(formData: FormData) {
 
 
   try {
-    await signIn('credentials', { email, password })
-
-  }
-  catch (e) {
+    await signIn('credentials', { email, password });
+  } catch (e) {
     if (e instanceof AuthError) {
       if (e.type === 'CredentialsSignin') {
-        e.message = 'Credenciais inválidas'
-        throw e
+        throw new Error('Credenciais inválidas, tente novamente');
       }
     }
 
     redirect('/');
   }
 }
+
