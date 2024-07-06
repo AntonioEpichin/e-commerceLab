@@ -1,19 +1,22 @@
+// components/checkout/Review.tsx
+
 import React from 'react';
 import { List, ListItem, ListItemText, Typography, Grid } from '@mui/material';
+import { useCart } from '@/context/CartContext';
 
-const Review: React.FC = () => {
-  const products = [
-    { name: 'Product 1', desc: 'Description 1', price: '$9.99' },
-    { name: 'Product 2', desc: 'Description 2', price: '$3.45' },
-  ];
+interface ReviewProps {
+  paymentDetails: {
+    cardName: string;
+    cardNumber: string;
+    expDate: string;
+    cvv: string;
+  };
+}
 
-  const addresses = ['123 Main St', 'City', 'State', 'ZIP'];
-  const payments = [
-    { name: 'Card type', detail: 'Visa' },
-    { name: 'Card holder', detail: 'Mr John Doe' },
-    { name: 'Card number', detail: 'xxxx-xxxx-xxxx-1234' },
-    { name: 'Expiry date', detail: '04/2024' },
-  ];
+const Review: React.FC<ReviewProps> = ({ paymentDetails }) => {
+  const { cartItems, total } = useCart();
+
+  const address = '123 Main St, City, State, ZIP';
 
   return (
     <React.Fragment>
@@ -21,16 +24,16 @@ const Review: React.FC = () => {
         Order Summary
       </Typography>
       <List disablePadding>
-        {products.map((product) => (
-          <ListItem key={product.name} sx={{ py: 1, px: 0 }}>
-            <ListItemText primary={product.name} secondary={product.desc} />
-            <Typography variant="body2">{product.price}</Typography>
+        {cartItems.map((item) => (
+          <ListItem key={item.id} sx={{ py: 1, px: 0 }}>
+            <ListItemText primary={item.nome} />
+            <Typography variant="body2">{item.preço.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Typography>
           </ListItem>
         ))}
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Total" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            $13.44
+            {total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
           </Typography>
         </ListItem>
       </List>
@@ -40,23 +43,37 @@ const Review: React.FC = () => {
             Shipping
           </Typography>
           <Typography gutterBottom>John Smith</Typography>
-          <Typography gutterBottom>{addresses.join(', ')}</Typography>
+          <Typography gutterBottom>{address}</Typography>
         </Grid>
         <Grid item container direction="column" xs={12} sm={6}>
           <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
             Payment Details
           </Typography>
           <Grid container>
-            {payments.map((payment) => (
-              <React.Fragment key={payment.name}>
-                <Grid item xs={6}>
-                  <Typography gutterBottom>{payment.name}</Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography gutterBottom>{payment.detail}</Typography>
-                </Grid>
-              </React.Fragment>
-            ))}
+            <Grid item xs={6}>
+              <Typography gutterBottom>Card holder</Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography gutterBottom>{paymentDetails.cardName}</Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography gutterBottom>Card number</Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography gutterBottom>xxxx-xxxx-xxxx-{paymentDetails.cardNumber.slice(-4)}</Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography gutterBottom>Expiry date</Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography gutterBottom>{paymentDetails.expDate}</Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography gutterBottom>CVV</Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography gutterBottom>{paymentDetails.cvv}</Typography>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

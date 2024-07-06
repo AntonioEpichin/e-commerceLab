@@ -1,31 +1,46 @@
+// components/checkout/Checkout.tsx
+
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Card, CardContent, CssBaseline, Grid, Stack, Step, StepLabel, Stepper, Typography, ThemeProvider, createTheme } from '@mui/material';
+import { Box, Button, CssBaseline, Grid, Stack, Step, StepLabel, Stepper, Typography, ThemeProvider, createTheme } from '@mui/material';
 import AddressForm from './AddressForm';
 import PaymentForm from './PaymentForm';
 import Review from './Review';
 import Info from './Info';
+import { useCart } from '@/context/CartContext';
 
-const steps = ['Shipping address', 'Payment details', 'Review your order'];
+const steps = ['Informações do Paciente', 'Informações de Pagamento', 'Revise seu pedido'];
 
-function getStepContent(step: number) {
+function getStepContent(step: number, handleChange: any, paymentDetails: any) {
   switch (step) {
     case 0:
       return <AddressForm />;
     case 1:
-      return <PaymentForm />;
+      return <PaymentForm handleChange={handleChange} />;
     case 2:
-      return <Review />;
+      return <Review paymentDetails={paymentDetails} />;
     default:
       throw new Error('Unknown step');
   }
 }
 
 const Checkout: React.FC = () => {
+  const { cartItems } = useCart();
+
+  const calculateTotal = () => {
+    return cartItems.reduce((sum, item) => sum + item.preço, 0);
+  };
+
   const [activeStep, setActiveStep] = useState(0);
-  const [totalPrice, setTotalPrice] = useState('$134.98');
+  const [totalPrice, setTotalPrice] = useState("R$ 0,00");
   const [isClient, setIsClient] = useState(false);
+  const [paymentDetails, setPaymentDetails] = useState({
+    cardName: '',
+    cardNumber: '',
+    expDate: '',
+    cvv: '',
+  });
 
   useEffect(() => {
     setIsClient(true);
@@ -34,12 +49,20 @@ const Checkout: React.FC = () => {
   const handleNext = () => {
     setActiveStep(activeStep + 1);
     if (activeStep === 1) {
-      setTotalPrice('$144.97');
+      setTotalPrice(calculateTotal().toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }));
     }
   };
 
   const handleBack = () => {
     setActiveStep(activeStep - 1);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setPaymentDetails(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
   };
 
   if (!isClient) {
@@ -72,7 +95,7 @@ const Checkout: React.FC = () => {
               </Stack>
             ) : (
               <React.Fragment>
-                {getStepContent(activeStep)}
+                {getStepContent(activeStep, handleChange, paymentDetails)}
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                   {activeStep !== 0 && (
                     <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
