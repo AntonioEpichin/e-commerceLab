@@ -1,3 +1,5 @@
+// components/Checkout.tsx
+
 'use client';
 
 import * as React from 'react';
@@ -12,18 +14,25 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import dynamic from "next/dynamic";
+import dynamic from 'next/dynamic';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { useCart } from '../context/CartContext';
 
 const defaultTheme = createTheme({
   palette: {
     primary: {
-      main: '#418041',  // Main green color
-    }
-  }
+      main: '#418041', // Main green color
+    },
+  },
 });
 
 function Checkout() {
+  const { cartItems } = useCart();
+
+  const calculateTotal = () => {
+    return cartItems.reduce((sum, item) => sum + item.preço, 0);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -44,138 +53,118 @@ function Checkout() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
+      <Container component="main">
         <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Pagamento
-          </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="cardholderName"
-              label="Nome impresso no cartão"
-              name="cardholderName"
-              autoComplete="cc-name"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="E-mail do titular"
-              name="email"
-              type="email"
-              autoComplete="email"
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="cpf"
-              label="CPF do titular"
-              name="cpf"
-              autoComplete="cpf"
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="phone"
-              label="Telefone do titular"
-              name="phone"
-              type="tel"
-              autoComplete="tel"
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="zipCode"
-              label="CEP do titular"
-              name="zipCode"
-              autoComplete="postal-code"
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="addressNumber"
-              label="Número"
-              name="addressNumber"
-              type="number"
-              autoComplete="address-line1"
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="cardNumber"
-              label="Número do cartão"
-              name="cardNumber"
-              autoComplete="cc-number"
-            />
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <TextField
-                  required
-                  fullWidth
-                  name="cardExpiryMonth"
-                  label="Mês de validade"
-                  type="number"
-                  id="cardExpiryMonth"
-                  autoComplete="cc-exp-month"
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  required
-                  fullWidth
-                  name="cardExpiryYear"
-                  label="Ano de validade"
-                  type="number"
-                  id="cardExpiryYear"
-                  autoComplete="cc-exp-year"
-                />
-              </Grid>
-            </Grid>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="cardCVV"
-              label="CVV"
-              type="number"
-              id="cardCVV"
-              autoComplete="cc-csc"
-            />
-            <FormControlLabel
-              control={<Checkbox value="agree" color="primary" name="termsAccepted" />}
-              label="Li e aceito os *Termos para o agendamento"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+        <Grid container spacing={2} justifyContent="center" alignItems="center" sx={{ height: '100vh' }}>
+          <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+            <Box
+              sx={{
+                p: 4,
+                border: '1px solid #e0e0e0',
+                borderRadius: 2,
+                backgroundColor: '#fafafa',
+                textAlign: 'center'
+              }}
             >
-              Confirmar agendamento
-            </Button>
-          </Box>
-        </Box>
+              <Typography component="h2" variant="h5">
+                Valor total
+              </Typography>
+              <Typography variant="h4" sx={{ fontWeight: 'bold', mt: 2 }}>
+                {calculateTotal().toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
+                <LockOutlinedIcon />
+              </Avatar>
+              <Typography component="h1" variant="h5">
+                Pagamento
+              </Typography>
+              <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                <TextField
+                  name="pacientName"
+                  label="Nome do paciente"
+                  margin="normal"
+                  required
+                  fullWidth
+                  autoFocus
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="cardholderName"
+                  label="Nome impresso no cartão"
+                  name="cardholderName"
+                  autoComplete="cc-name"
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="cardNumber"
+                  label="Número do cartão"
+                  name="cardNumber"
+                  autoComplete="cc-number"
+                />
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    <TextField
+                      required
+                      fullWidth
+                      name="cardExpiryMonth"
+                      label="Mês de validade"
+                      type="number"
+                      id="cardExpiryMonth"
+                      autoComplete="cc-exp-month"
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      required
+                      fullWidth
+                      name="cardExpiryYear"
+                      label="Ano de validade"
+                      type="number"
+                      id="cardExpiryYear"
+                      autoComplete="cc-exp-year"
+                    />
+                  </Grid>
+                </Grid>
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="cardCVV"
+                  label="CVV"
+                  type="number"
+                  id="cardCVV"
+                  autoComplete="cc-csc"
+                />
+                <FormControlLabel
+                  control={<Checkbox value="agree" color="primary" name="termsAccepted" />}
+                  label="Li e aceito os *Termos para o agendamento"
+                />
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Confirmar agendamento
+                </Button>
+              </Box>
+            </Box>
+          </Grid>
+        </Grid>
       </Container>
     </ThemeProvider>
   );

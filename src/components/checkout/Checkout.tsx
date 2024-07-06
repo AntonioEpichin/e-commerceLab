@@ -52,7 +52,7 @@ const Checkout: React.FC = () => {
       <Grid container>
         <Grid item xs={12} md={6}>
           <Box sx={{ p: 2 }}>
-            <Info totalPrice={totalPrice} />
+            <Info />
           </Box>
         </Grid>
         <Grid item xs={12} md={6}>
