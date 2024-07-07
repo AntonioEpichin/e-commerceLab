@@ -88,7 +88,7 @@ const Checkout: React.FC = () => {
             </Stepper>
             {activeStep === steps.length ? (
               <Stack spacing={2}>
-                <Typography variant="h5">Obrigado pela sua compra!</Typography>
+                <Typography variant="h5" style={{ marginTop: '20px' }} >Obrigado pela sua compra!</Typography>
                 <Typography>Your order number is #12345. We have emailed your order confirmation.</Typography>
                 <Button variant="contained">Ir para meus pedidos</Button>
               </Stack>
