@@ -21,7 +21,7 @@ const Review: React.FC<ReviewProps> = ({ paymentDetails }) => {
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
-        Order Summary
+        Resumo do pedido
       </Typography>
       <List disablePadding>
         {cartItems.map((item) => (
@@ -40,30 +40,30 @@ const Review: React.FC<ReviewProps> = ({ paymentDetails }) => {
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
           <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-            Shipping
+            Dados do Paciente
           </Typography>
           <Typography gutterBottom>John Smith</Typography>
           <Typography gutterBottom>{address}</Typography>
         </Grid>
         <Grid item container direction="column" xs={12} sm={6}>
           <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-            Payment Details
+            Detalhes do Pagamento
           </Typography>
           <Grid container>
             <Grid item xs={6}>
-              <Typography gutterBottom>Card holder</Typography>
+              <Typography gutterBottom>Titular do Cartão</Typography>
             </Grid>
             <Grid item xs={6}>
               <Typography gutterBottom>{paymentDetails.cardName}</Typography>
             </Grid>
             <Grid item xs={6}>
-              <Typography gutterBottom>Card number</Typography>
+              <Typography gutterBottom>Número do Cartão</Typography>
             </Grid>
             <Grid item xs={6}>
               <Typography gutterBottom>xxxx-xxxx-xxxx-{paymentDetails.cardNumber.slice(-4)}</Typography>
             </Grid>
             <Grid item xs={6}>
-              <Typography gutterBottom>Expiry date</Typography>
+              <Typography gutterBottom>Data de Validade</Typography>
             </Grid>
             <Grid item xs={6}>
               <Typography gutterBottom>{paymentDetails.expDate}</Typography>
