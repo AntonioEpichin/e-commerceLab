@@ -7,6 +7,19 @@ import {
   PaymentElement,
 } from "@stripe/react-stripe-js";
 import convertToSubcurrency from "@/lib/convertToSubcurrency";
+import CircularProgress from '@mui/material/CircularProgress';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const defaultTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#418041', // Main green color
+    },
+  },
+});
 
 const CheckoutPage = ({ amount }: { amount: number }) => {
   const stripe = useStripe();
@@ -52,12 +65,7 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
     });
 
     if (error) {
-      // This point is only reached if there's an immediate error when
-      // confirming the payment. Show the error to your customer (for example, payment details incomplete)
       setErrorMessage(error.message);
-    } else {
-      // The payment UI automatically closes with a success animation.
-      // Your customer is redirected to your `return_url`.
     }
 
     setLoading(false);
@@ -65,32 +73,42 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
 
   if (!clientSecret || !stripe || !elements) {
     return (
-      <div className="flex items-center justify-center">
-        <div
-          className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
-          role="status"
-        >
-          <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
-            Loading...
-          </span>
-        </div>
-      </div>
+      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+        <CircularProgress />
+      </Box>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-2 rounded-md">
-      {clientSecret && <PaymentElement />}
+    <ThemeProvider theme={defaultTheme}>
+      <Box display="flex" justifyContent="center" alignItems="center" height="100vh" bgcolor="background.paper">
+        <Box component="form" onSubmit={handleSubmit} p={4} borderRadius={2} boxShadow={3} maxWidth={600} width="100%">
+          <Box textAlign="center" mb={2}>
+            <Typography variant="h5" component="h2" gutterBottom>
+              Sonny
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+              has requested ${amount.toFixed(2)}
+            </Typography>
+          </Box>
 
-      {errorMessage && <div>{errorMessage}</div>}
+          {clientSecret && <PaymentElement />}
 
-      <button
-        disabled={!stripe || loading}
-        className="text-white w-full p-5 bg-black mt-2 rounded-md font-bold disabled:opacity-50 disabled:animate-pulse"
-      >
-        {!loading ? `Pay $${amount}` : "Processing..."}
-      </button>
-    </form>
+          {errorMessage && <Typography color="error" gutterBottom>{errorMessage}</Typography>}
+
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={!stripe || loading}
+            sx={{ mt: 2, fontWeight: 'bold' }}
+          >
+            {!loading ? `Pay $${amount}` : "Processing..."}
+          </Button>
+        </Box>
+      </Box>
+    </ThemeProvider>
   );
 };
 
