@@ -60,7 +60,7 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
       elements,
       clientSecret,
       confirmParams: {
-        return_url: `http://www.localhost:3000/payment-success?amount=${amount}`,
+        return_url: `${window.location.origin}/payment-success?amount=${amount}`,
       },
     });
 
@@ -85,10 +85,10 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
         <Box component="form" onSubmit={handleSubmit} p={4} borderRadius={2} boxShadow={3} maxWidth={600} width="100%">
           <Box textAlign="center" mb={2}>
             <Typography variant="h5" component="h2" gutterBottom>
-              Sonny
+              Cliente
             </Typography>
             <Typography variant="body1" gutterBottom>
-              has requested ${amount.toFixed(2)}
+              Valor total dos Exames R$ {amount.toFixed(2).replace('.', ',')}
             </Typography>
           </Box>
 
@@ -104,7 +104,7 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
             disabled={!stripe || loading}
             sx={{ mt: 2, fontWeight: 'bold' }}
           >
-            {!loading ? `Pay $${amount}` : "Processing..."}
+            {!loading ? `Pagar R$ ${amount.toFixed(2).replace('.', ',')}` : "Processando..."}
           </Button>
         </Box>
       </Box>
