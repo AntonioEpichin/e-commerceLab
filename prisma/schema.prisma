@@ -1,16 +1,45 @@
+// prisma/schema.prisma
+
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  url = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model User {
-  id       String          @id @default(cuid())
+  id       String   @id @default(cuid())
   name     String
-  email    String          @unique
+  email    String   @unique
   password String
+  orders   Order[]
+}
+
+model Exam {
+  id     String  @id @default(cuid())
+  name   String
+  price  Float
+  orders OrderItem[]
+}
+
+model Order {
+  id        String      @id @default(cuid())
+  createdAt DateTime    @default(now())
+  total     Float
+  userId    String
+  user      User        @relation(fields: [userId], references: [id])
+  items     OrderItem[]
+}
+
+model OrderItem {
+  id      String @id @default(cuid())
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id])
+  examId  String
+  exam    Exam   @relation(fields: [examId], references: [id])
+  quantity Int
+  price   Float
 }
