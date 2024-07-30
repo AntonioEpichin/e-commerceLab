@@ -79,17 +79,6 @@ export default function ExamesTable() {
     });
   };
 
-  useEffect(() => {
-    const checkSession = async () => {
-      const session = await getSession();
-      if (!session && status !== 'loading') {
-        router.push(`/login?callbackUrl=${encodeURIComponent(window.location.pathname)}`);
-      }
-    };
-
-    checkSession();
-  }, [status, router]);
-
   const filteredExames = exames.filter(exame =>
     exame.nome.toLowerCase().includes(searchTerm.toLowerCase())
   );
