@@ -7,7 +7,9 @@ import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Pagination } from '@mui/material';
 import { useCart } from '../context/CartContext';
-import { useSearch } from '../context/SearchContext'; 
+import { useSearch } from '../context/SearchContext';
+import { useSession, getSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 const defaultTheme = createTheme({
   palette: {
@@ -46,6 +48,8 @@ export default function ExamesTable() {
   const itemsPerPage = 5;
   const { addItemToCart } = useCart();
   const { searchTerm } = useSearch();
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
     fetch('/exames.json')
@@ -57,6 +61,34 @@ export default function ExamesTable() {
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
+
+  const handleAddToCart = async (exame) => {
+    if (status === 'loading') return;
+
+    const session = await getSession();
+    if (!session) {
+      alert('Você precisa estar logado para adicionar exames ao carrinho.');
+      router.push(`/login?callbackUrl=${encodeURIComponent(window.location.pathname)}`);
+      return;
+    }
+
+    addItemToCart({
+      id: exame.id,
+      nome: exame.nome,
+      preço: exame.preço
+    });
+  };
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const session = await getSession();
+      if (!session && status !== 'loading') {
+        router.push(`/login?callbackUrl=${encodeURIComponent(window.location.pathname)}`);
+      }
+    };
+
+    checkSession();
+  }, [status, router]);
 
   const filteredExames = exames.filter(exame =>
     exame.nome.toLowerCase().includes(searchTerm.toLowerCase())
@@ -79,7 +111,7 @@ export default function ExamesTable() {
           </Box>
           <List>
             {paginatedExames.map((exame: any) => (
-              <Item key={exame.id} exame={exame} onAdd={addItemToCart} />
+              <Item key={exame.id} exame={exame} onAdd={handleAddToCart} />
             ))}
           </List>
           <Pagination count={count} page={page} onChange={handleChangePage} sx={{ mt: 2, display: 'flex', justifyContent: 'center' }} />
