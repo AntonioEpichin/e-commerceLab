@@ -29,11 +29,11 @@ function InnerRootLayout({ children }) {
 
   return (
     <html lang="pt-br">
-      <body className={isCartOpen ? 'drawer-open' : ''}>
-        <NavBar />
-        <Cart />
-        <LogoSection />
+      <body className={isCartOpen ? 'drawer-open' : ''}>        
         <main>
+          <NavBar />
+          <Cart />
+          <LogoSection />
           {children}
           <SpeedInsights />
         </main>

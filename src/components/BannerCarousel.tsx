@@ -43,7 +43,7 @@ export default function BannerCarousel() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Box sx={{ maxWidth: '100%', flexGrow: 1 }}>
+      <Box sx={{ maxWidth: '100%', flexGrow: 1, padding: 2.5 }}>
         <Paper
           square
           elevation={0}

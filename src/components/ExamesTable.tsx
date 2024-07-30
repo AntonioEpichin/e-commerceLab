@@ -9,7 +9,6 @@ import { Pagination } from '@mui/material';
 import { useCart } from '../context/CartContext';
 import { useSearch } from '../context/SearchContext'; 
 
-
 const defaultTheme = createTheme({
   palette: {
     primary: {
@@ -59,17 +58,16 @@ export default function ExamesTable() {
     setPage(newPage);
   };
 
-const filteredExames = exames.filter(exame =>
-        exame.nome.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    
-    const count = Math.ceil(filteredExames.length / itemsPerPage);
-    const paginatedExames = filteredExames.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+  const filteredExames = exames.filter(exame =>
+    exame.nome.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
+  const count = Math.ceil(filteredExames.length / itemsPerPage);
+  const paginatedExames = filteredExames.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main">
+      <Container component="main" sx={{ maxWidth: '100% !important' }}>
         <Paper sx={{ padding: 2, borderRadius: '10px', backgroundColor: '#e0e0e0' }} elevation={0}>
           <Box sx={{ display: 'flex', alignItems: 'center', pl: 2, mb: 2, backgroundColor: 'primary.main', borderRadius: '10px' }}>
             <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
