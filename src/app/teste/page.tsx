@@ -1,8 +1,24 @@
-import { auth } from "./../../../auth"
+'use client'
 
-export default async function Teste() {
-    const {user} = await auth()
-    console.log(user)
+import { useEffect, useState } from "react";
+//import { auth } from "./../../../auth"
+import { getSession } from "next-auth/react";
 
-    return (<p>Welcome {user?.name}!</p>)
+export default  function Teste() {
+
+    const [session, setSession] = useState(null);
+
+
+    useEffect(() => {
+      async function fetchSession() {
+        const session = await getSession();
+        setSession(session);
+      }
+  
+      fetchSession();
+    }, []);
+   
+    console.log(session)
+
+    return (<p>{session?.user.name}</p>)
 }
