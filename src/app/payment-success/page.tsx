@@ -22,7 +22,7 @@ export default async function PaymentSuccess({ searchParams: { amount } }: Payme
               Obrigado, {user.name}!
             </Typography>
             <Typography variant="h2" component="h2" sx={{ fontSize: '1.5rem' }}>
-              Sua ordem foi processada com sucesso.
+             Verifique seu e-mail para acompanhar o status de sua Ordem.
             </Typography>
 
             <Paper elevation={3} sx={{ backgroundColor: 'white', padding: '10px', borderRadius: '8px', marginTop: '20px', color: '#418041', fontSize: '2rem', fontWeight: 'bold' }}>
