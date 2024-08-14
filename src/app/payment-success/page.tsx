@@ -2,6 +2,8 @@ import React from 'react';
 import { Container, Typography, Box, Paper } from '@mui/material';
 import { auth } from 'auth';
 import { sendMail } from '@/lib/mailService';
+import PaymentClient from '@/components/checkout/PaymentClient';
+
 
 interface PaymentSuccessProps {
   searchParams: {
@@ -11,7 +13,7 @@ interface PaymentSuccessProps {
 
 
 
-export default async function PaymentSuccess({ searchParams: { amount } }: PaymentSuccessProps) {
+export default async function Page({ searchParams: { amount } }: PaymentSuccessProps) {
 
   const {user} = await auth()
 
@@ -65,7 +67,7 @@ export default async function PaymentSuccess({ searchParams: { amount } }: Payme
               Obrigado, {user.name}!
             </Typography>
             <Typography variant="h2" component="h2" sx={{ fontSize: '1.5rem' }}>
-              Sua ordem foi processada com sucesso enviaremos um e-mail com os detalhes da sua compra.
+              Sua ordem foi processada com sucesso! O número da sua ordem é: <strong>{orderNumber}</strong>
             </Typography>
 
             <Paper elevation={3} sx={{ backgroundColor: 'white', padding: '10px', borderRadius: '8px', marginTop: '20px', color: '#418041', fontSize: '2rem', fontWeight: 'bold' }}>
@@ -73,6 +75,8 @@ export default async function PaymentSuccess({ searchParams: { amount } }: Payme
             </Paper>
           </Box>
         </Box>
+        <PaymentClient/>
       </Container>
+
   );
 };
