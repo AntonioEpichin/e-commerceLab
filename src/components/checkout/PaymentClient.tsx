@@ -4,11 +4,11 @@ import { useCart } from "@/context/CartContext";
 import { useEffect } from "react";
 
 export default function PaymentClient () {
-  const { clearCart } = useCart();
+  const { clearCart, cartItems } = useCart();
 
  useEffect(() => {
   clearCart();
- }, []);
+ }, [cartItems]);
 
   return null;
 }
