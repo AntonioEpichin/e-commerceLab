@@ -57,7 +57,6 @@ export default async function Page({ searchParams: { amount } }: PaymentSuccessP
 
   //COLOCAR AQUI A LÓGICA PARA SALVAR NO BANCO DE DADOS
 
-  // COLOCAR UMA PROP DE USUARIO PARA PEGAR O NOME DO USUARIO E TRANSFORMAR EM UM COMPONENTE "USE CLIENT"
 
   return (
       <Container maxWidth="lg" sx={{ padding: '20px', textAlign: 'center', marginTop: '20px' }}>
