@@ -33,6 +33,9 @@ export const sendMail = async (from: string, to: string, subject: string, html: 
             }
         });
 
+        // Adding a small delay to ensure verification logs are captured before sending email
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
         const mailOptions = {
             from: from,
             to: to,
