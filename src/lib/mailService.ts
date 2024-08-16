@@ -42,7 +42,6 @@ export const sendMail = async (from: string, to: string, subject: string, html: 
             subject: subject,
             html: html
         };
-
         logger.info(`Sending mail to - ${to}`);
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
@@ -50,6 +49,8 @@ export const sendMail = async (from: string, to: string, subject: string, html: 
                 throw new Error(`Failed to send email: ${error.message}`);
             } else {
                 logger.info(`Email sent successfully: ${info.response}`);
+                logger.debug(`Message ID: ${info.messageId}`);
+                logger.debug(`Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
             }
         });
     } catch (err) {
