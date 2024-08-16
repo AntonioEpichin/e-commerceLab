@@ -13,12 +13,23 @@ export const sendMail = async (from: string, to: string, subject: string, html: 
         logger.debug(`MAIL_USERNAME: ${process.env.MAIL_USERNAME}`);
         logger.debug(`MAIL_PASSWORD: ${process.env.MAIL_PASSWORD ? '******' : 'Not Provided'}`);
 
+        // Alternative Email Transport Configuration
         const transporter = nodemailer.createTransport({
-            service: process.env.MAIL_HOST,
+            host: 'smtp.zoho.com',  // Replace with your actual SMTP host if needed
             port: 465,
+            secure: true,  // true for 465, false for other ports
             auth: {
                 user: process.env.MAIL_USERNAME,
                 pass: process.env.MAIL_PASSWORD
+            }
+        });
+
+        // Verify the transporter configuration
+        transporter.verify(function (error, success) {
+            if (error) {
+                logger.error(`Transporter verification failed: ${error.message}`);
+            } else {
+                logger.info('Server is ready to take our messages');
             }
         });
 
