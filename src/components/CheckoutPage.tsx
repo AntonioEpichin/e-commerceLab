@@ -85,7 +85,7 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
         <Box component="form" onSubmit={handleSubmit} p={4} borderRadius={2} boxShadow={3} maxWidth={600} width="100%">
           <Box textAlign="center" mb={2}>
             <Typography variant="h5" component="h2" gutterBottom>
-              Cliente
+              Checkout
             </Typography>
             <Typography variant="body1" gutterBottom>
               Valor total dos Exames R$ {amount.toFixed(2).replace('.', ',')}
