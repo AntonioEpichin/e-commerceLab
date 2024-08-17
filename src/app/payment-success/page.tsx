@@ -2,6 +2,8 @@ import React from 'react';
 import { Container, Typography, Box, Paper } from '@mui/material';
 import { auth } from 'auth';
 import PaymentClient from '@/components/checkout/PaymentClient';
+import ClearCarrinho from '@/components/checkout/clearCarrinho';
+
 
 interface PaymentSuccessProps {
   searchParams: {
@@ -20,6 +22,7 @@ export default async function Page({ searchParams: { amount } }: PaymentSuccessP
             Obrigado, {user.name}!
           </Typography>
           <PaymentClient amount={amount} user={{ name: user.name, email: user.email }} />
+          <ClearCarrinho />
         </Box>
       </Box>
     </Container>
