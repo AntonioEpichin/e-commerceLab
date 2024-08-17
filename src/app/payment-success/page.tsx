@@ -1,4 +1,3 @@
-// src/app/payment-success/page.tsx
 import React from 'react';
 import { Container, Typography, Box, Paper } from '@mui/material';
 import { auth } from 'auth';

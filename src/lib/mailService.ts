@@ -13,28 +13,15 @@ export const sendMail = async (from: string, to: string, subject: string, html: 
         logger.debug(`MAIL_USERNAME: ${process.env.MAIL_USERNAME}`);
         logger.debug(`MAIL_PASSWORD: ${process.env.MAIL_PASSWORD ? '******' : 'Not Provided'}`);
 
-        // Alternative Email Transport Configuration
         const transporter = nodemailer.createTransport({
-            host: 'smtp.zoho.com',  // Replace with your actual SMTP host if needed
+            host: 'smtp.zoho.com',
             port: 465,
-            secure: true,  // true for 465, false for other ports
+            secure: true,
             auth: {
                 user: process.env.MAIL_USERNAME,
                 pass: process.env.MAIL_PASSWORD
             }
         });
-
-        // Verify the transporter configuration
-        transporter.verify(function (error, success) {
-            if (error) {
-                logger.error(`Transporter verification failed: ${error.message}`);
-            } else {
-                logger.info('Server is ready to take our messages');
-            }
-        });
-
-        // Adding a small delay to ensure verification logs are captured before sending email
-        await new Promise(resolve => setTimeout(resolve, 1000));
 
         const mailOptions = {
             from: from,
@@ -42,17 +29,22 @@ export const sendMail = async (from: string, to: string, subject: string, html: 
             subject: subject,
             html: html
         };
+
         logger.info(`Sending mail to - ${to}`);
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                logger.error(`Error sending email: ${error.message}`);
-                throw new Error(`Failed to send email: ${error.message}`);
-            } else {
-                logger.info(`Email sent successfully: ${info.response}`);
-                logger.debug(`Message ID: ${info.messageId}`);
-                logger.debug(`Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
-            }
+
+        // Wrapping sendMail in a Promise for serverless environment compatibility
+        await new Promise<void>((resolve, reject) => {
+            transporter.sendMail(mailOptions, (err, info) => {
+                if (err) {
+                    logger.error(`Error sending mail: ${err.message}`);
+                    reject(err);
+                } else {
+                    logger.info(`Mail sent: ${info.response}`);
+                    resolve();
+                }
+            });
         });
+
     } catch (err) {
         logger.error(`Unexpected error: ${err.message}`);
         throw err;
