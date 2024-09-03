@@ -5,7 +5,7 @@ Este é um projeto de e-commerce desenvolvido para fins de aprendizado, utilizan
 
 ## ✨ Demonstração
 
-[Insira o link da sua aplicação Vercel aqui, caso disponível.]
+https://e-lab-tcc.vercel.app
 
 ## 🚀 Tecnologias Utilizadas
 
